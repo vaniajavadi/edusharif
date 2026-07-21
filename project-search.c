@@ -13,7 +13,7 @@ typedef long long ll;
 //using namespace std;
 
 ///////////////////////////////////////////////////////////SEARCH
-Student* search_student(*student ptr, *Student st){
+Student* search_student(student* ptr, Student* st){
     if(ptr == NULL)    return NULL;
 
     if(st->name != NULL){
@@ -27,14 +27,17 @@ Student* search_student(*student ptr, *Student st){
     }
     return search_student(ptr->next, st);
 }
-void wrong_username(){
-    prinf("username not found!\n
-        1. retry\n
-        2. Go to login login_menu\n
-        Enter your option: ");
 
-    int option;
-    scanf("%d", &option);
+//////////////////////////////////////////////////////////////////////
+Request* search_request(int no, int cur, Request* ptr){
+    if(no < 1 || ptr == NULL){
+        return NULL;
+    }
 
-    return --option;
+    if(no == cur){
+        return ptr;
+    }
+    return search_request(no, cur++, ptr->next);
 }
+/////////////////////////////////////////////////////////////////////
+
