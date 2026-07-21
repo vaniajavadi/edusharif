@@ -13,6 +13,17 @@ typedef long long ll;
 //using namespace std;
 
 ////////////////////////////////////////////////////////////LOGIN
+void wrong_username(){
+    prinf("username not found!\n
+        1. retry\n
+        2. Go to login login_menu\n
+        Enter your option: ");
+
+    int option;
+    scanf("%d", &option);
+
+    return --option;
+}
 ll get_username(){
     printf("Enter your username: ");
     ll username = 0;
