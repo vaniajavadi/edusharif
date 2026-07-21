@@ -68,7 +68,8 @@ typedef struct faculty{
     char* reshte;
     char* akharinmadrak;
     char* department;
-    ll id, kodmeli;
+    char* id;
+    ll  kodmeli;
     char* password;
     struct faculty* next;
     struct faculty* prev;
@@ -88,7 +89,6 @@ typedef struct course{
 
 typedef struct offer{
     Course* course;
-    char* id;
     char* department;
     char* address;
     Faculty* faculty;
@@ -103,6 +103,7 @@ typedef struct request{
     Faculty* faculty;
     Course* course;
     Offer* offer;
+    char* address;
     struct request* next;
     struct request* prev;
 }Request;
