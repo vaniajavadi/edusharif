@@ -62,31 +62,8 @@ void admin_calendar(){
 	return;
 
 }
+/////////////////////////////////////////////////////////////////////////////////////////Studentlist
 
-void print_student(Student* ptr){
-	if(ptr == NULL){
-		printf("student doesnt exist");
-		return;
-	}
-	char* name, char* lastname, char* password, char* reshte, char* maghta,
-                        char* ostadrahnama, char* department,
-                        char* answer1, char* answer2, char* answer3,
-                        float gpa, ll id, ll kodemeli, ll year,
-                        Term_student* head, Student* next, Student* prev)
-	printf("|%s |%s |%lld |%lld |%s |%lld |%s |%s |%s| %s | %s | %s|\n",
-		ptr->name, ptr->lastname, ptr->id, ptr->kodemeli, ptr->reshte,
-		ptr->year, ptr->maghta, ptr->ostadrahnama, ptr->department,
-		ptr->answer1, ptr->answer2, ptr->answer3);
-	return;
-
-}
-
-void print_student_list(Student* ptr){
-	if(ptr == NULL) return;
-	print_student(ptr);
-	print_student_list(ptr->next);
-	return;
-}
 
 void search_student_menu(){
 	printf("1.search by first name\n
@@ -137,6 +114,7 @@ void search_student_menu(){
 		foundedSt = search_student(foundedSt->next, st);
 		print_student(foundedSt);
 	}
+	return;
 
 }
 
@@ -156,7 +134,11 @@ void student_list(){
 		search_student_menu();
 	return;
 }
+
+
 ///////////////////////////////// register_student_menu
+
+
 void register_student_menu(){
 	prinf("Register student(s)\n
 	 1. Register one student\n
@@ -175,21 +157,65 @@ void register_student_menu(){
     if(option == 1){
     	printf("Enter student info");
     	getline(&line, &bufferSize, stdin);
-    	add_student();
+    	add_student(line);
     	free(line);
     }
     else{
     	printf("Enter file address");
 
-    	char* 
     	getline(&line, &bufferSize, stdin);
     	line[strscpn(line, "\n")] = '\0';
+    	FILE *fp = fopen(line, "r");
 
+
+    	ssize_t read = getline(&line, &bufferSize, fp);
+    	while(read != -1){
+    		add_student(line);
+    		ssize_t read = getline(&line, &bufferSize, fp);
+    	}
+    	free(line);
+    	fclose(fp);
     }
-
-
+    register_student_menu();
+    return;
 }	
 
+////////////////////////////////////////////remove student menu
+
+void remove_student_menu(){
+	prinf("1.Remove student\n2.back\nEnter an option:");
+	int option;
+	scanf("%d%*c", &option);
+	if(option == 2)
+		return
+
+	printf("Enter student id:")
+	ll id;
+	scanf("%lld%*c", &id);
+
+	Student* ptr = search_student(headStudent, create_student(NULL, NULL, NULL, NULL, NULL,
+                                                 NULL, NULL,
+                                                 NULL, NULL, NULL,
+                                                 0.0, id, 0, 0, 
+                                                 NULL, NULL, NULL));
+
+	if(ptr == NULL){
+		printf("student doesnt exist");
+		return;
+	}
+
+	printf("|%s |%s |%lld |%lld |%s |%lld |%s |%s |%s|\nRemove student? [y/n]",
+			ptr->name, ptr->lastname, ptr->id, ptr->kodemeli, ptr->reshte,
+			ptr->year, ptr->maghta, ptr->ostadrahnama, ptr->department);
+
+	char ch;
+	scanf("%c", &ch);
+	if(ch == 'y'){
+		remove_student(ptr);
+		reset_file_student();
+	}
+	return;
+}
 //////////////////////////////////////////// admin_student
 void admin_students() {
 	int option = 0;
@@ -210,9 +236,71 @@ void admin_students() {
         remove_student_menu();
     } 
     else
-        return; 
+        return;
 }
-    
+//////////////////////////////////////////////admin_faculty_members
+
+void admin_faculty_members(){
+
+}
+
+
+////////////////////////////////////////////request
+
+void accept_request(Request* rqst){
+	if(rqst == NULL){
+		printf("there is no request with that number\n");
+		return;
+	}
+	if(ter[1] == 2){
+		printf("NOT POSSIBLE! ENTEKHAB VAHED TAMOM SHODE");
+
+	}
+
+	else if(rqst->type == 0){
+		if(term[1] == 2){
+			printf("NOT POSSIBLE!");
+		}
+		else{
+			Offer* offer = creat_offer(rqst->course, rqst->course->daneshkade, rqst->address,
+                    rqst->faculty, term->id, 0, rqst->enroll,
+                    NULL, NULL, NULL);
+			push_offer(offer, headOffer);
+			push_offer_file(offer);
+		}	
+	}
+	else if(rqst->type == 1){
+		remove_offer(rqst->offer);
+		reset_offer();
+	}
+	else if(rqst->type == 2){
+		rqst->offer->zarfiyat = rqst->enroll;
+		reset_offer();
+	}
+
+	remove_request(rqst);
+}
+
+void admin_request(){
+	printf("List of requests:\n");
+	print_request_list(1, headRequest);
+	printf("1. accept request\n2. Go back\nEnter an option:");
+	int option;	scanf("%d%*c", &option);
+	if(option == 2)	return;
+	printf("Enter request's number: ");
+	scanf("%d%*c", &option);
+	accept_request(search_request(option, 1, headRequest));
+	admin_request();
+	return;
+
+}
+////////////////////////////////////////////////////////////offering
+void admin_offering(){
+
+}
+
+///////////////////////////////////////////////////////////courses
+
 
 
 ////////////////////////////////////////////////////////////dashboard
@@ -239,7 +327,7 @@ void dashboard_admin(){
 	    admin_faculty_members();
 	} 
 	else if (option == 4) {
-	    admin_requests();
+	    admin_request();
 	} 
 	else if (option == 5) {
 	    admin_offerings();
