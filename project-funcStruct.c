@@ -61,7 +61,7 @@ Student* creat_student(char* name, char* lastname, char* password, char* reshte,
 }
 
 Faculty* creat_faculty(char* name, char* lastname, char* reshte, char* akharinmadrak,
-                        char* department, ll id, ll kodmeli, char* password,
+                        char* department, char* id, ll kodmeli, char* password,
                         Faculty* next, Faculty* prev){
     Faculty* to_return = (Faculty*) malloc(sizeof(Faculty));
     to_return->name = strdup(name);
@@ -69,7 +69,7 @@ Faculty* creat_faculty(char* name, char* lastname, char* reshte, char* akharinma
     to_return->reshte = strdup(reshte);
     to_return->akharinmadrak = strdup(akharinmadrak);
     to_return->department = strdup(department);
-    to_return->id = id;
+    to_return->id = strdup(id);
     to_return->kodmeli = kodmeli;
     to_return->password = strdup(password);
     to_return->next = next;
@@ -93,12 +93,11 @@ Course* creat_course(char* name, char* maghta, char* reshte, char* daneshkade,
     return to_return;
 }
 
-Offer* creat_offer(Course* course, char* id, char* department, char* address,
+Offer* creat_offer(Course* course, char* department, char* address,
                     Faculty* faculty, int termId, int enrollment, int zarfiyat,
                     Student* head, Offer* next, Offer* prev){
     Offer* to_return = (Offer*) malloc(sizeof(Offer));
     to_return->course = course;
-    to_return->id = strdup(id);
     to_return->department = strdup(department);
     to_return->address = strdup(address);
     to_return->faculty = faculty;
@@ -112,8 +111,9 @@ Offer* creat_offer(Course* course, char* id, char* department, char* address,
 }
 
 Request* creat_request(int type, int enroll, Faculty* faculty, Course* course,
-                        Offer* offer, Request* next, Request* prev){
+                        Offer* offer, char* address, Request* next, Request* prev){
     Request* to_return = (Request*) malloc(sizeof(Request));
+    to_return->address = strdup(address);
     to_return->type = type;
     to_return->enroll = enroll;
     to_return->faculty = faculty;
