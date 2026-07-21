@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+//#include <cstdlib>
+//#include <bits/stdc++.h>
+//#include <iostream>
+//fgets(line2, 2000, stdin);
+//int size_line1 = strlen(line1) - 1; 
+typedef long long ll;
+
+//using namespace std;
+
+
+////////////////////////////////////////////////////////////student
+
+
+void reset_file_student(){
+	FILE *fp = fopen("student.cvs", "w");
+	Student* ptr = headStudent;
+
+	while(ptr != NULL){
+		//|first name |last name |student id |password| national code |field |entrance year |section |mentor |department| answer 1 | answer 2 | answer 3|
+
+		fprintf(fp, "|%s |%s |%lld |%s| %lld |%s |%lld |%s |%s |%s| %s | %s | %s|\n",
+			ptr->name, ptr->lastname, ptr->id, ptr->password, ptr->kodemeli, ptr->reshte,
+			ptr->year, ptr->maghta, ptr->ostadrahnama, ptr->department,
+			ptr->answer1, ptr->answer2, ptr->answer3);
+
+
+		fprinf(fp, "enrolles_offerings:{\n");
+		Term_student* tr = ptr->head_term;
+
+		while(tr != NULL){
+			fprinf(fp, "\t\"%d\": {\n", tr->id);
+			Course_student* = cr = tr->head;
+			while(cr->next != NULL){
+				fprinf(fp,"\t\t\"%s\": %f,\n", cr->id, cr->score);
+				cr = cr->next;
+
+			}
+			fprintf(fp, "\t\t\"%s\": %f\n", cr->id, cr->score);
+			if(tr->next == NULL)
+				fprinf(fp, ":\t}\n");
+			else
+				fprinf(fp, "\t},\n");
+
+			tr = tr->next;
+
+		}
+		ptr = ptr->next;
+	}
+
+	fclose(fp);
+	return;
+}
+
+//////////////////////////////////////////////////////////////
