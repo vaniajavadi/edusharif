@@ -3,9 +3,9 @@
 
 void read_student();
 Request* creat_request(int type, int enroll, Faculty* faculty, Course* course,
-                        Offer* offer, Request* next, Request* prev)
+                        Offer* offer, char* address, Request* next, Request* prev)
 
-Offer* creat_offer(Course* course, char* id, char* department, char* address,
+Offer* creat_offer(Course* course, char* department, char* address,
                     Faculty* faculty, int termId, int enrollment, int zarfiyat,
                     Student* head, Offer* next, Offer* prev)
 
@@ -46,7 +46,7 @@ scanf("%d%*c" &option);
 
 push_course_student(head, cr);
 push_term_student(head, tr);
-push_student(st, head_student);
+
 search_faculity();
 
 
@@ -58,6 +58,28 @@ void print_student_list(Student* ptr);
 
 
 
+void register_student_menu();
+void rtrim(char* str);
+void push_student(st, head_student);
+void push_file_student(line);
+
+
+
+void remove_student_menu();
+void remove_student(Student* st);///////////////////// kheili kar dare!
+void reset_file_student()
+
+
+
+void admin_request();
+void print_request_list(1, headRequest);
+Request* search_request(no, 1, headRequest);
+void accept_request(rqst);
+
+push_offer(offer, headOffer);//monde
+push_offer_file(offer);//monde
+reset_offer();//monde
+remove_offer(rqst->offer);//monde
 
 ////////////////////
 TEMP
@@ -88,5 +110,10 @@ creat_faculty(NULL, NULL, NULL, NULL, NULL,
     			student_dashboard->
     			search_faculity->
     			factulity_dashboard->
-    		login_admin-> admin_dashboard->
+    		login_admin-> 
+            admin_dashboard->
+               student_list->
+                  admin_faculity_members->
+                  admin_offering->
+                     
 
