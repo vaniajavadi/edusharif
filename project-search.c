@@ -1,43 +1,38 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-//#include <cstdlib>
-//#include <bits/stdc++.h>
-//#include <iostream>
-//fgets(line2, 2000, stdin);
-//int size_line1 = strlen(line1) - 1; 
-typedef long long ll;
+#include "shoro.h"
 
-//using namespace std;
 
-///////////////////////////////////////////////////////////SEARCH
-Student* search_student(student* ptr, Student* st){
-    if(ptr == NULL)    return NULL;
+Student* search_student(Student* ptr, Student* st) {
+    if (ptr == NULL) return NULL;
 
-    if(st->name != NULL){
-        if(ptr->name == st->name)   return ptr;
+    if (st->name != NULL && st->name[0] != '\0') {
+        if (strcmp(ptr->name, st->name) == 0) return ptr;
     }
-    else if(st->lastname != NULL){
-        if(ptr->lastname == st->lastname)   return ptr;
+    else if (st->lastname != NULL && st->lastname[0] != '\0') {
+        if (strcmp(ptr->lastname, st->lastname) == 0) return ptr;
     }
-    else{
-        if(ptr->id == st->id) return ptr;
+    else {
+        if (ptr->id == st->id) return ptr;
     }
     return search_student(ptr->next, st);
 }
 
-//////////////////////////////////////////////////////////////////////
-Request* search_request(int no, int cur, Request* ptr){
-    if(no < 1 || ptr == NULL){
-        return NULL;
-    }
+Faculty* search_faculty(Faculty* ptr, Faculty* fc) {
+    if (ptr == NULL) return NULL;
 
-    if(no == cur){
-        return ptr;
+    if (fc->name != NULL && fc->name[0] != '\0') {
+        if (strcmp(ptr->name, fc->name) == 0) return ptr;
     }
-    return search_request(no, cur++, ptr->next);
+    else if (fc->lastname != NULL && fc->lastname[0] != '\0') {
+        if (strcmp(ptr->lastname, fc->lastname) == 0) return ptr;
+    }
+    else {
+        if (strcmp(ptr->username, fc->username) == 0) return ptr;
+    }
+    return search_faculty(ptr->next, fc);
 }
-/////////////////////////////////////////////////////////////////////
 
+Request* search_request(int no, int cur, Request* ptr) {
+    if (no < 1 || ptr == NULL) return NULL;
+    if (no == cur) return ptr;
+    return search_request(no, cur + 1, ptr->next);
+}
