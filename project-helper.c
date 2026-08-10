@@ -1,119 +1,89 @@
+#include "shoro.h"
 
+char* dup_safe(const char* s) {
+    if (s == NULL) s = "";
+    char* copy = (char*)malloc(strlen(s) + 1);
+    strcpy(copy, s);
+    return copy;
+}
 
+void rtrim(char* str) {
+    if (str == NULL) return;
+    int end = (int)strlen(str) - 1;
+    while (end >= 0 && isspace((unsigned char)str[end])) {
+        str[end] = '\0';
+        end--;
+    }
+}
 
-void read_student();
-Request* creat_request(int type, int enroll, Faculty* faculty, Course* course,
-                        Offer* offer, char* address, Request* next, Request* prev)
+void ltrim(char* str) {
+    if (str == NULL) return;
+    int start = 0;
+    while (str[start] != '\0' && isspace((unsigned char)str[start])) start++;
+    if (start > 0) memmove(str, str + start, strlen(str + start) + 1);
+}
 
-Offer* creat_offer(Course* course, char* department, char* address,
-                    Faculty* faculty, int termId, int enrollment, int zarfiyat,
-                    Student* head, Offer* next, Offer* prev)
+void trim(char* str) {
+    ltrim(str);
+    rtrim(str);
+}
 
+long long safe_atoll(const char* s) {
+    if (s == NULL) return 0;
+    return atoll(s);
+}
 
-Course* creat_course(char* name, char* maghta, char* reshte, char* daneshkade,
-                      char* id, char* phishniaz, int tedad_vahed,
-                      Course* next, Course* prev)
+int safe_atoi(const char* s) {
+    if (s == NULL) return 0;
+    return atoi(s);
+}
 
-Faculty* creat_faculty(char* name, char* lastname, char* reshte, char* akharinmadrak,
-                        char* department, ll id, ll kodmeli, char* password,
-                        Faculty* next, Faculty* prev)
+static int course_units(const char* courseId) {
+    Course* c = headCourse;
+    while (c != NULL) {
+        if (strcmp(c->id, courseId) == 0) return c->tedad_vahed;
+        c = c->next;
+    }
+    return 1;
+}
 
-Student* creat_student(char* name, char* lastname, char* password, char* reshte, char* maghta,
-                        char* ostadrahnama, char* department,
-                        char* answer1, char* answer2, char* answer3,
-                        float gpa, ll id, ll kodemeli, ll year,
-                        Term_student* head, Student* next, Student* prev)
-Term_student* creat_term_student(ll id, Course_student* head, Term_student* next,
-                                 Term_student* prev)
+void recompute_student_gpa(Student* st) {
+    float totalPoints = 0.0f;
+    int totalUnits = 0;
 
-Course_student* creat_course_student(char* id, float score, Course_student* next, Course_student* prev){
+    Term_student* tr = st->head_term;
+    while (tr != NULL) {
+        float termPoints = 0.0f;
+        int termUnits = 0;
 
-Student* search_student(*student ptr, *Student st);
-void search_student_menu()
+        Course_student* cr = tr->head_course;
+        while (cr != NULL) {
+            if (cr->score >= 0.0f) {
+                int u = course_units(cr->id);
+                termPoints += cr->score * (float)u;
+                termUnits += u;
+            }
+            cr = cr->next;
+        }
 
-void login_menu();
-void login_studentOfaculity(int t)
-void login_admin()
-void dashboard_student()
-void dashboard_faculity(Faculty* me)
-void dashboard_admin()
+        tr->GPA = (termUnits > 0) ? (termPoints / (float)termUnits) : 0.0f;
+        totalPoints += termPoints;
+        totalUnits += termUnits;
+        tr = tr->next;
+    }
 
-ll get_username()
-void wrong_username();
-void to_lowercase(char* s);
+    st->gpa = (totalUnits > 0) ? (totalPoints / (float)totalUnits) : 0.0f;
+}
 
-scanf("%d%*c" &option);
+void to_lowercase(char* s) {
+    if (s == NULL) return;
+    for (int i = 0; s[i] != '\0'; i++) {
+        s[i] = (char)tolower((unsigned char)s[i]);
+    }
+}
 
-push_course_student(head, cr);
-push_term_student(head, tr);
-
-search_faculity();
-
-
-char* calendar_message(int state);
-void admin_calendar();
-void student_list();
-void print_student(Student* ptr);
-void print_student_list(Student* ptr);
-
-
-
-void register_student_menu();
-void rtrim(char* str);
-void push_student(st, head_student);
-void push_file_student(line);
-
-
-
-void remove_student_menu();
-void remove_student(Student* st);///////////////////// kheili kar dare!
-void reset_file_student()
-
-
-
-void admin_request();
-void print_request_list(1, headRequest);
-Request* search_request(no, 1, headRequest);
-void accept_request(rqst);
-
-push_offer(offer, headOffer);//monde
-push_offer_file(offer);//monde
-reset_offer();//monde
-remove_offer(rqst->offer);//monde
-
-////////////////////
-TEMP
-strcmp(st->password, password) == 0
-create_student(NULL, NULL, NULL, NULL, NULL,
-                                                 NULL, NULL,
-                                                 NULL, NULL, NULL,
-                                                 0.0, username, 0, 0, 
-                                                 NULL, NULL, NULL);
-creat_faculty(NULL, NULL, NULL, NULL, NULL,
-                                                 username, 0, NULL, NULL, NULL)
-
- char* line = NULL;
-    size_t bufferSize = 0;
-    getline(&line, &bufferSize, stdin);
-    line[strscpn(line, "\n")] = '\0';
-
-
-
-
-    ///////////////////
-    open:
-    main->login menue-> login_student->
-    main-> 
-    	read->
-    	login menue->
-    		login_studentOfaculity
-    			student_dashboard->
-    			search_faculity->
-    			factulity_dashboard->
-    		login_admin-> 
-            admin_dashboard->
-               student_list->
-                  admin_faculity_members->
-                  admin_offering->
-                     
-
+void print_space(int n) {
+    if (n <= 0) return;
+    printf(" ");
+    print_space(n - 1);
+}
