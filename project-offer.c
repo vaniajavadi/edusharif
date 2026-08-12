@@ -290,13 +290,20 @@ void admin_request(void) {
     if (headRequest == NULL) printf("(no pending requests)\n");
     print_request_list(1, headRequest);
 
-    printf("1. Accept request\n2. Go back\nEnter an option: ");
+    printf("1. Accept request\n2.Reject request\n3. Go back\nEnter an option: ");
     int option; scanf("%d%*c", &option);
-    if (option == 2) return;
+    if (option == 3) return;
+
 
     printf("Enter request's number: ");
     int number; scanf("%d%*c", &number);
-    accept_request(search_request(number, 1, headRequest));
+
+    if(option == 2){
+            Request* rqst = search_request(number, 1, headRequest);
+            remove_request(rqst);
+    }
+    else
+     accept_request(search_request(number, 1, headRequest));
 
     admin_request();
 }
